@@ -1,0 +1,26 @@
+{
+  "name": "neighborhood-map",
+  "version": "1.0.0",
+  "description": "",
+  "main": "server.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node server.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/xdimitarx/Neighborhood-Map.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/xdimitarx/Neighborhood-Map/issues"
+  },
+  "homepage": "https://github.com/xdimitarx/Neighborhood-Map#readme",
+  "dependencies": {
+    "ejs": "^2.5.6",
+    "express": "^4.15.3",
+    "node-yelp-fusion": "^1.0.4",
+    "superagent": "^3.5.2"
+  }
+}
