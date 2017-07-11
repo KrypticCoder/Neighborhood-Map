@@ -21,10 +21,7 @@
                     <input data-bind="click: textSearch" id="go-places" type="button" value="Go">
 
                     <ul data-bind="foreach: placeMarkers">
-                        <li data-bind="text: $data.title"></li>
-                        <ul>
-                            <li data-bind="text: $data.formatted_address"></li>
-                        </ul>
+                        <li data-bind="text: $data.title, click: $parent.getMarkerInfo"></li>
                     </ul>
                 </div>
 
