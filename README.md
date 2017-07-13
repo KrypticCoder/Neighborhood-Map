@@ -12,6 +12,9 @@ This project uses the [Google Maps API](https://developers.google.com/maps/docum
 1. Start server with `node server.js`
 2. Navigate to 'localhost:3000/' in your browswer to view page
 
+## Usage
+Enter location and a search term to find businesses corresponding to your query. A list of places will show on the left panel. Click on either the marker or the name in the panel to view more information about that specific place.
+
 ![Starting page](https://ibb.co/gq5zvF)
 
 ## Acknowledgements

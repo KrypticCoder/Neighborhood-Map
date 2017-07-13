@@ -8,10 +8,8 @@ const url = require('url');
 var clientId = 'ROsk2ClVgLyX4T0M4CE5ow';
 var clientSecret = 'tpwUNiEpcIAtdbOfnBFiIhTsUnydgb0DM33RJ2ZOULJFPbHGIqm8EmQGhcWe9JBm';
 
-
 var Yelp = require('node-yelp-fusion');
 var yelp = new Yelp({ id: clientId, secret: clientSecret });
-
 
 app.engine('html', require('ejs').renderFile);
 app.set('view engine', 'html');
@@ -19,6 +17,8 @@ app.set('views', __dirname + '/public/views/');
 
 app.use(express.static(__dirname + '/public'));
 
+
+// Endpoint for finding reviews about a businesses given an id
 app.get('/yelp_reviews', function(req, res){
 
   var place_id = req.query.place_id;
@@ -29,6 +29,7 @@ app.get('/yelp_reviews', function(req, res){
 
 });
 
+// Endpoint for finding businesses based on location and search term
 app.get('/yelp_search', function(req, res){
 
   var lat = req.query.location.lat;
@@ -43,7 +44,6 @@ app.get('/yelp_search', function(req, res){
 
 });
 
-// The homepage route of our application does not interface with the MovieAnalyst API and is always accessible. We won’t use the getAccessToken middleware here. We’ll simply render the index.ejs view.
 app.get('/', function(req, res){
     res.render('index');
 });
