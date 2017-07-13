@@ -10,6 +10,7 @@ var ViewModel = function(){
 
     var self = this;
 
+    // Knockout Array to hold markers resulting from search query
     self.placeMarkers = ko.observableArray([]);
 
     self.zoom = function(){ 
@@ -137,15 +138,8 @@ var ViewModel = function(){
 
             // Create a single infowwindow to be used with the place details information
             // so that only one is open at once.
-            
             // If a marker is clicked, do a place details search on it in the next function.
-            marker.addListener('click', function(){
-                if(placeInfoWindow.marker == this){
-                    console.log("This infowindow already is on this marker.");
-                } else {
-                    getPlacesDetails(this, placeInfoWindow);
-                }
-            });
+            marker.addListener('click', markerClick);
 
             self.placeMarkers.push(marker);
 
@@ -156,6 +150,14 @@ var ViewModel = function(){
             }
         }
         map.fitBounds(bounds);
+    }
+
+    function markerClick(){
+        if(placeInfoWindow.marker == this){
+            console.log("This infowindow already is on this marker.");
+        } else {
+            getPlacesDetails(this, placeInfoWindow);
+        }
     }
 
     // This is the PLACE DETAILS search - it's the most detailed so it's only
@@ -388,7 +390,7 @@ function initMap() {
     // Bias the searchbox to within the bounds of the map.
     searchBox.setBounds(map.getBounds());
 
-        // Listen for the event fired when the user selects a prediction from the
+    // Listen for the event fired when the user selects a prediction from the
     // picklist and retrieve more details for that place.
     searchBox.addListener('places_changed', function() {
         viewModel.autoSearch(searchBox);
