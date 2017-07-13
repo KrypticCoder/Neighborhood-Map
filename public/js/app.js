@@ -15,6 +15,9 @@ var ViewModel = function(){
 
     var self = this;
 
+    self.places_search = ko.observable(defaultValue.query);
+    self.zoom_to_area_text = ko.observable(defaultValue.location);
+
     self.filter = ko.observable("");
 
     self.placeMarkers = ko.observableArray([]);
@@ -33,25 +36,27 @@ var ViewModel = function(){
 
 
     self.zoom = function(){ 
-        zoomToArea();
+        self.zoomToArea();
     };
 
-    self.textSearch = function(){
-        var query = $('#places-search').val();
+    self.searchForText = function(){
+        self.zoom();
+        var query = self.places_search();
         if(query !== ''){
-            textSearchPlaces();
+            self.textSearchPlaces();
         } else {
             window.alert('Please specify a search query first');
         }        
     };
 
     self.autoSearch = function(searchBox){
-        searchBoxPlaces(searchBox);
+        self.zoom();
+        self.searchBoxPlaces(searchBox);
     };
 
     self.getMarkerInfo = function(marker){
         placeInfoWindow.marker = marker;
-        getPlacesDetails(marker, placeInfoWindow);
+        self.getPlacesDetails(marker, placeInfoWindow);
     };
 
     self.stringStartsWith = function(string, startsWith) {          
@@ -62,11 +67,11 @@ var ViewModel = function(){
     };
 
     // This function will loop through the listings and hide them all.
-    function hideMarkers(markers) {
+     self.hideMarkers = function(markers) {
         for (var i = 0; i < markers.length; i++) {
             markers[i].setMap(null);
         }
-    }
+    };
 
     // // This function takes in a COLOR, and then creates a new marker
     // // icon of that color. The icon will be 21 px wide by 34 high, have an origin
@@ -84,11 +89,11 @@ var ViewModel = function(){
     // This function takes the input value in the find nearby area text input
     // locates it, and then zooms into that area. This is so that the user can
     // show all listings, then decide to focus on one area of the map.
-    function zoomToArea() {
+    self.zoomToArea = function() {
         // Initialize the geocoder.
         var geocoder = new google.maps.Geocoder();
         // Get the address or place that the user entered.
-        var address = document.getElementById('zoom-to-area-text').value;
+        var address = self.zoom_to_area_text();
         // Make sure the address isn't blank.
         if (address === '') {
             window.alert('You must enter an area, or address.');
@@ -107,40 +112,40 @@ var ViewModel = function(){
                 }
             });
         }
-    }
+    };
 
     // This function fires when the user selects a searchbox picklist item.
     // It will do a nearby search using the selected query string or place.
-    function searchBoxPlaces(searchBox) {
+    self.searchBoxPlaces = function(searchBox) {
         hideMarkers(self.placeMarkers);
         self.placeMarkers.removeAll();
         var places = searchBox.getPlaces();
         // For each place, get the icon, name and location.
-        createMarkersForPlaces(places);
+        self.createMarkersForPlaces(places);
         if (places.length === 0) {
             window.alert('We did not find any places matching that search!');
         }
-    }
+    };
 
     // This function firest when the user select "go" on the places search.
     // It will do a nearby search using the entered query string or place.
-    function textSearchPlaces() {
+    self.textSearchPlaces = function() {
         var bounds = map.getBounds();
-        hideMarkers(self.placeMarkers);
+        self.hideMarkers(self.placeMarkers);
         self.placeMarkers.removeAll();
         var placesService = new google.maps.places.PlacesService(map);
         placesService.textSearch({
-            query: document.getElementById('places-search').value,
+            query: self.places_search(),
             bounds: bounds
         }, function(results, status) {
             if (status === google.maps.places.PlacesServiceStatus.OK) {
-                createMarkersForPlaces(results);
+                self.createMarkersForPlaces(results);
             }
         });
-    }
+    };
 
     // this function creates markers for each place found in either places search.
-    function createMarkersForPlaces(places){
+    self.createMarkersForPlaces = function(places){
         var maxLength = Math.min(50, places.length);
 
         var bounds = new google.maps.LatLngBounds();
@@ -165,7 +170,7 @@ var ViewModel = function(){
             // Create a single infowwindow to be used with the place details information
             // so that only one is open at once.
             // If a marker is clicked, do a place details search on it in the next function.
-            marker.addListener('click', markerClick);
+            marker.addListener('click', self.markerClick);
 
             self.placeMarkers.push(marker);
 
@@ -176,20 +181,20 @@ var ViewModel = function(){
             }
         }
         map.fitBounds(bounds);
-    }
+    };
 
-    function markerClick(){
+    self.markerClick = function(){
         if(placeInfoWindow.marker == this){
             console.log("This infowindow already is on this marker.");
         } else {
-            getPlacesDetails(this, placeInfoWindow);
+            self.getPlacesDetails(this, placeInfoWindow);
         }
-    }
+    };
 
     // This is the PLACE DETAILS search - it's the most detailed so it's only
     // executed when a marker is selected, indicating the user wants more
     // details about that place.
-    function getPlacesDetails(marker, infowindow){
+    self.getPlacesDetails = function(marker, infowindow){
 
         var innerHTML = '';
         var atLeastOne = false;
@@ -313,7 +318,7 @@ var ViewModel = function(){
             }
         });
 
-    }
+    };
 
 };
 
@@ -422,7 +427,5 @@ function initMap() {
         viewModel.autoSearch(searchBox);
     });
 
-    $('#zoom-to-area-text').val(defaultValue.location);
-    $('#places-search').val(defaultValue.query);
-    viewModel.textSearch();
+    viewModel.searchForText();
 }
