@@ -6,12 +6,31 @@ var defaultValue = {
     query: "pizza"
 };
 
+function mapLoadingError(){
+    window.alert("Map could not be loaded. Please make sure your API key is correct.");
+}
+
+
 var ViewModel = function(){
 
     var self = this;
 
-    // Knockout Array to hold markers resulting from search query
+    self.filter = ko.observable("");
+
     self.placeMarkers = ko.observableArray([]);
+
+    self.filteredMarkers = ko.computed(function() {
+
+        var filter = this.filter().toLowerCase();
+        if (!filter) {
+            return this.placeMarkers();
+        } else {
+            return ko.utils.arrayFilter(this.placeMarkers(), function(marker) {
+                return self.stringStartsWith(marker.title.toLowerCase(), filter);
+            });
+        }
+    }, this);
+
 
     self.zoom = function(){ 
         zoomToArea();
@@ -35,6 +54,13 @@ var ViewModel = function(){
         getPlacesDetails(marker, placeInfoWindow);
     };
 
+    self.stringStartsWith = function(string, startsWith) {          
+        string = string || "";
+        if (startsWith.length > string.length)
+            return false;
+        return string.substring(0, startsWith.length) === startsWith;
+    };
+
     // This function will loop through the listings and hide them all.
     function hideMarkers(markers) {
         for (var i = 0; i < markers.length; i++) {
@@ -42,18 +68,18 @@ var ViewModel = function(){
         }
     }
 
-    // This function takes in a COLOR, and then creates a new marker
-    // icon of that color. The icon will be 21 px wide by 34 high, have an origin
-    // of 0, 0 and be anchored at 10, 34).
-    function makeMarkerIcon(markerColor) {
-        var markerImage = new google.maps.MarkerImage('http://chart.googleapis.com/chart?chst=d_map_spin&chld=1.15|0|'+ markerColor + 
-            '|40|_|%E2%80%A2',
-            new google.maps.Size(21, 34),
-            new google.maps.Point(0, 0),
-            new google.maps.Point(10, 34),
-            new google.maps.Size(21,34));
-        return markerImage;
-    }
+    // // This function takes in a COLOR, and then creates a new marker
+    // // icon of that color. The icon will be 21 px wide by 34 high, have an origin
+    // // of 0, 0 and be anchored at 10, 34).
+    // function makeMarkerIcon(markerColor) {
+    //     var markerImage = new google.maps.MarkerImage('http://chart.googleapis.com/chart?chst=d_map_spin&chld=1.15|0|'+ markerColor + 
+    //         '|40|_|%E2%80%A2',
+    //         new google.maps.Size(21, 34),
+    //         new google.maps.Point(0, 0),
+    //         new google.maps.Point(10, 34),
+    //         new google.maps.Size(21,34));
+    //     return markerImage;
+    // }
 
     // This function takes the input value in the find nearby area text input
     // locates it, and then zooms into that area. This is so that the user can

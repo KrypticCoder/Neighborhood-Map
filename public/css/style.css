@@ -35,7 +35,7 @@ input {
     position: absolute;
 }
 
-.search-results {
+aside {
     background-color: #777;
     width: 200px;
     height: 100%;
@@ -44,6 +44,11 @@ input {
     bottom: 0;
     position: absolute;
     overflow-y: scroll;
+}
+
+search-results {
+    top: 30px;
+    position: absolute;
 }
 
 .one-result {
@@ -69,7 +74,7 @@ input {
 
 
 @media screen and (max-width: 699px){
-    .header {
+    header {
         background-color: #333;
         top: 0;
         left: 0;
@@ -78,7 +83,7 @@ input {
         position: fixed;
     }
 
-    .main-content {
+    main {
         left: 0;
         right: 0;
         top: 150px;
@@ -86,7 +91,7 @@ input {
         position: fixed;
     }
 
-    .header-title {
+    header-title {
         color: white;
         font-size: 20px;
         display: block;
@@ -96,27 +101,26 @@ input {
         text-align: center;
     }
 
-    .header-bar {
+    nav {
         display: flex;
         flex-wrap: wrap;
     }
 
-    .location {
+    nav-location {
         display: inline-block;
         margin: 0 auto;
         position: relative;
-        padding: 5px;
+        padding
 
     }
 
-    .query {
+    nav-query {
         display: inline-block;
         margin: 0 auto;
         position: relative;
-        padding: 5px;
     }
 
-    .search-results {
+    aside {
         display: none
     }
 
@@ -131,7 +135,7 @@ input {
 }
 
 @media screen and (min-width: 700px){
-    .header {
+    header {
         background-color: #333;
         top: 0;
         left: 0;
@@ -140,7 +144,7 @@ input {
         position: fixed;
     }
 
-    .main-content {
+    main {
         left: 0;
         right: 0;
         top: 100px;
@@ -148,7 +152,7 @@ input {
         position: fixed;
     }
 
-    .header-title {
+   header-title {
         color: white;
         font-size: 20px;
         display: inline-block;
@@ -161,7 +165,7 @@ input {
         text-align: center;
     }
 
-    .header-bar {
+    nav {
         display: inline-block;
         height: 100%;
         left: 200px;
@@ -171,14 +175,14 @@ input {
         position: absolute;
     }
 
-    .location, .query {
+    nav-location, nav-query {
         padding: 5px;
     }
 
 }
 
 @media screen and (min-width: 1150px){
-    .header {
+    header {
         background-color: #333;
         top: 0;
         left: 0;
@@ -187,7 +191,8 @@ input {
         position: fixed;
     }
 
-    .main-content {
+
+    main {
         left: 0;
         right: 0;
         top: 60px;
@@ -195,17 +200,17 @@ input {
         position: fixed;
     }
 
-    .location, .query {
+    nav-location, nav-query {
         display: inline-block;
         padding: 5px;
     }
 
-    .query input {
+    nav-query input {
         left: 20px;
         position: relative;
     }
 
-    .header-title {
+    header-title{
         color: white;
         font-size: 20px;
         display: inline-block;
@@ -217,7 +222,7 @@ input {
         left: 0;
     }
 
-    .header-bar {
+    nav {
         display: inline-block;
         height: 100%;
         left: 200px;
@@ -242,7 +247,7 @@ input {
     max-width: 400px;
 }
 
-#review_name {
+#review_header-title {
     float: left;
 }
 

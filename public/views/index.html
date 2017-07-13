@@ -2,45 +2,56 @@
 <html>
     <head>
         <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+
         <title>My Neighborhood Map</title>
+
         <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap.min.css">
         <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.6.3/css/font-awesome.min.css">
         <link rel="stylesheet" href="../css/style.css">
+
     </head>
     <body>
         <div>
-            <div class="header">
-                <div class="header-title">
+            <header>
+                <header-title>
                     <b>Neighborhood Map</b>
-                </div>
-                <div class="header-bar">
-                    <div class="location">
+                </header-title>
+                <nav>
+                    <nav-location>
                         <input id="zoom-to-area-text" class="form-control" type="text" value="">
-                        <input data-bind="click: zoom" id="zoom-to-area" class="btn btn-default" type="button" value="Zoom">
-                    </div>
-                    <div class="query">
+                        <input id="zoom-to-area" class="btn btn-default" data-bind="click: zoom"  type="button" value="Zoom">
+                    </nav-location>
+                    <nav-query>
                         <input id="places-search" class="form-control" type="text" value="">
-                        <input data-bind="click: textSearch" id="go-places" class="btn btn-default" type="button" value="Go">
-                    </div>
-                </div>
-            </div>
-            <div class="main-content">
-                <div class="search-results" data-bind="foreach: placeMarkers">
-                    <div class="one-result-container">
-                        <div class="one-result" data-bind="text: $data.title, click: $parent.getMarkerInfo"></div>
-                    </div>
-                
-                </div>
+                        <input id="go-places" class="btn btn-default" data-bind="click: textSearch"   type="button" value="Go">
+                    </nav-query>
+                </nav>
+            </header>
+            <main>
+                <aside>
+                    <input id="filter" class="form-control"  data-bind="value: filter, valueUpdate: 'afterkeydown'" type="text">
+                    <search-results data-bind="foreach: filteredMarkers">
+                        <div class="one-result-container">
+                            <div class="one-result" data-bind="text: $data.title, click: $parent.getMarkerInfo"></div>
+                        </div>
+                    </search-results>
+                </aside>
                 <div id="map"></div>
-            </div>    
+            </main> 
         </div>
+        <script>
 
+        </script>
         <script src="../js/libs/jquery.min.js"></script> 
         <script src="../js/libs/knockout-3.2.0.js"></script>
         <script src="../js/app.js"></script>
-        <script async defer
+        <script
+            onerror="mapLoadingError()"
+            async defer
             src=
             "https://maps.googleapis.com/maps/api/js?libraries=places,geometry,drawing&key=AIzaSyBx8rMSdcwelWB-HF1HMPyOuwynaZJERsI&v=3&callback=initMap">
+        
         </script>
 
     </body>
