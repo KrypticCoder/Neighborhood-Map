@@ -12,7 +12,7 @@ This project uses the [Google Maps API](https://developers.google.com/maps/docum
 1. Start server with `node server.js`
 2. Navigate to 'localhost:3000/' in your browswer to view page
 
-![Starting page](https://ibb.co/gq5zvF)
+![Starting page](http://i.imgur.com/wuJWkZ7.png)
 
 ## Acknowledgements
 This was a class project for Udacity's Full Stack Web Developer Nanodegree course. Please see [here](https://www.udacity.com/) for more details. 
