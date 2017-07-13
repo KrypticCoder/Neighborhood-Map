@@ -45,7 +45,7 @@ app.get('/yelp_search', function(req, res){
 
 // The homepage route of our application does not interface with the MovieAnalyst API and is always accessible. We won’t use the getAccessToken middleware here. We’ll simply render the index.ejs view.
 app.get('/', function(req, res){
-    res.render('index2');
+    res.render('index');
 });
 
 app.listen(3000);
