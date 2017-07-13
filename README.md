@@ -15,7 +15,7 @@ This project uses the [Google Maps API](https://developers.google.com/maps/docum
 ## Usage
 Enter location and a search term to find businesses corresponding to your query. A list of places will show on the left panel. Click on either the marker or the name in the panel to view more information about that specific place.
 
-![Starting page](https://ibb.co/gq5zvF)
+![Starting page](http://i.imgur.com/wuJWkZ7.png)
 
 ## Acknowledgements
 This was a class project for Udacity's Full Stack Web Developer Nanodegree course. Please see [here](https://www.udacity.com/) for more details. 
