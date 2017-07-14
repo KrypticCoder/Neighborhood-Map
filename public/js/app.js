@@ -406,6 +406,10 @@ function initMap() {
         mapTypeControl: false
     });
 
+    google.maps.event.addDomListener(window, 'resize', function() {
+        map.fitBounds(bounds); // `bounds` is a `LatLngBounds` object
+    });
+
 
     // This autocomplete is for use in the geocoder entry box.
     var zoomAutocomplete = new google.maps.places.Autocomplete(
