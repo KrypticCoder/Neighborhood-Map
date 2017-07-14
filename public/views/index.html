@@ -19,11 +19,11 @@
                 </header-title>
                 <nav>
                     <div class="nav-location">
-                        <input id="zoom-to-area-text" class="form-control" data-bind="value: zoom_to_area_text" type="text">
+                        <input id="zoom-to-area-text" class="form-control" data-bind="value: zoomToAreaText" type="text">
                         <input id="zoom-to-area" class="btn btn-default" data-bind="click: zoom"  type="button" value="Zoom">
                     </div>
                     <div class="nav-query">
-                        <input id="places-search" class="form-control" data-bind="value: places_search" type="text">
+                        <input id="places-search" class="form-control" data-bind="value: placesSearch" type="text">
                         <input id="go-places" class="btn btn-default" data-bind="click: searchForText"   type="button" value="Go">
                     </div>
                 </nav>
@@ -45,7 +45,6 @@
         </script>
         <script src="../js/libs/jquery.min.js"></script> 
         <script src="../js/libs/knockout-3.2.0.js"></script>
-        <script src="../js/styles.json"></script>
         <script src="../js/app.js"></script>
         <script
             onerror="mapLoadingError()"

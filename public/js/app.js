@@ -10,13 +10,12 @@ function mapLoadingError(){
     window.alert("Map could not be loaded. Please make sure your API key is correct.");
 }
 
-
 var ViewModel = function(){
 
     var self = this;
 
-    self.places_search = ko.observable(defaultValue.query);
-    self.zoom_to_area_text = ko.observable(defaultValue.location);
+    self.placesSearch = ko.observable(defaultValue.query);
+    self.zoomToAreaText = ko.observable(defaultValue.location);
 
     self.filter = ko.observable("");
 
@@ -29,7 +28,15 @@ var ViewModel = function(){
             return this.placeMarkers();
         } else {
             return ko.utils.arrayFilter(this.placeMarkers(), function(marker) {
-                return self.stringStartsWith(marker.title.toLowerCase(), filter);
+
+                if (self.stringContains(marker.title.toLowerCase(), filter)){
+                    marker.setVisible(true);
+                    return true;
+                } else {
+                    marker.setVisible(false);
+                    return false;
+                }
+                
             });
         }
     }, this);
@@ -41,7 +48,7 @@ var ViewModel = function(){
 
     self.searchForText = function(){
         self.zoom();
-        var query = self.places_search();
+        var query = self.placesSearch();
         if(query !== ''){
             self.textSearchPlaces();
         } else {
@@ -59,6 +66,11 @@ var ViewModel = function(){
         self.getPlacesDetails(marker, placeInfoWindow);
     };
 
+
+    self.stringContains = function(string, subString){
+        return string.indexOf(subString) !== -1;
+    };
+
     self.stringStartsWith = function(string, startsWith) {          
         string = string || "";
         if (startsWith.length > string.length)
@@ -73,19 +85,6 @@ var ViewModel = function(){
         }
     };
 
-    // // This function takes in a COLOR, and then creates a new marker
-    // // icon of that color. The icon will be 21 px wide by 34 high, have an origin
-    // // of 0, 0 and be anchored at 10, 34).
-    // function makeMarkerIcon(markerColor) {
-    //     var markerImage = new google.maps.MarkerImage('http://chart.googleapis.com/chart?chst=d_map_spin&chld=1.15|0|'+ markerColor + 
-    //         '|40|_|%E2%80%A2',
-    //         new google.maps.Size(21, 34),
-    //         new google.maps.Point(0, 0),
-    //         new google.maps.Point(10, 34),
-    //         new google.maps.Size(21,34));
-    //     return markerImage;
-    // }
-
     // This function takes the input value in the find nearby area text input
     // locates it, and then zooms into that area. This is so that the user can
     // show all listings, then decide to focus on one area of the map.
@@ -93,7 +92,7 @@ var ViewModel = function(){
         // Initialize the geocoder.
         var geocoder = new google.maps.Geocoder();
         // Get the address or place that the user entered.
-        var address = self.zoom_to_area_text();
+        var address = self.zoomToAreaText();
         // Make sure the address isn't blank.
         if (address === '') {
             window.alert('You must enter an area, or address.');
@@ -135,7 +134,7 @@ var ViewModel = function(){
         self.placeMarkers.removeAll();
         var placesService = new google.maps.places.PlacesService(map);
         placesService.textSearch({
-            query: self.places_search(),
+            query: self.placesSearch(),
             bounds: bounds
         }, function(results, status) {
             if (status === google.maps.places.PlacesServiceStatus.OK) {
@@ -164,6 +163,7 @@ var ViewModel = function(){
                 icon: icon,
                 title: place.name,
                 position: place.geometry.location,
+                animation: google.maps.Animation.DROP,
                 id: place.place_id
             });
 
@@ -184,10 +184,21 @@ var ViewModel = function(){
     };
 
     self.markerClick = function(){
-        if(placeInfoWindow.marker == this){
+
+        var this_marker = this;
+
+        if(placeInfoWindow.marker == this_marker){
+
             console.log("This infowindow already is on this marker.");
         } else {
-            self.getPlacesDetails(this, placeInfoWindow);
+            self.getPlacesDetails(this_marker, placeInfoWindow);
+
+
+            this_marker.setAnimation(google.maps.Animation.BOUNCE);
+
+            window.setTimeout(function(){
+                this_marker.setAnimation(null);
+            }, 2500);
         }
     };
 
@@ -407,7 +418,7 @@ function initMap() {
     });
 
     google.maps.event.addDomListener(window, 'resize', function() {
-        map.fitBounds(bounds); // `bounds` is a `LatLngBounds` object
+        map.fitBounds(map.getBounds()); 
     });
 
 
