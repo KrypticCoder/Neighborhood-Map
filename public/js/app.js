@@ -23,14 +23,16 @@ var ViewModel = function(){
 
     self.filteredMarkers = ko.computed(function() {
 
-        var filter = this.filter().toLowerCase();
+        var filter = self.filter().toLowerCase();
         if (!filter) {
-            return this.placeMarkers();
+            return self.placeMarkers();
         } else {
-            return ko.utils.arrayFilter(this.placeMarkers(), function(marker) {
+            return ko.utils.arrayFilter(self.placeMarkers(), function(marker) {
 
                 if (self.stringContains(marker.title.toLowerCase(), filter)){
-                    marker.setVisible(true);
+                    for(var i = 0; i < self.placeMarkers.length; i++){
+                        self.placeMarkers[i].setVisible = true;
+                    }
                     return true;
                 } else {
                     marker.setVisible(false);
@@ -41,11 +43,12 @@ var ViewModel = function(){
         }
     }, this);
 
-
+    // function caleld when user clicks 'Zoom'
     self.zoom = function(){ 
         self.zoomToArea();
-    };
+    };  
 
+    // function called when user clicks 'GO'
     self.searchForText = function(){
         self.zoom();
         var query = self.placesSearch();
@@ -56,26 +59,22 @@ var ViewModel = function(){
         }        
     };
 
+    // function called when user selects an item from search box options
     self.autoSearch = function(searchBox){
         self.zoom();
         self.searchBoxPlaces(searchBox);
     };
 
+    // handler for when a marker is clicked
     self.getMarkerInfo = function(marker){
         placeInfoWindow.marker = marker;
         self.getPlacesDetails(marker, placeInfoWindow);
+        self.animateMarker(marker);
     };
 
-
+    // checks if a subString is in a string
     self.stringContains = function(string, subString){
         return string.indexOf(subString) !== -1;
-    };
-
-    self.stringStartsWith = function(string, startsWith) {          
-        string = string || "";
-        if (startsWith.length > string.length)
-            return false;
-        return string.substring(0, startsWith.length) === startsWith;
     };
 
     // This function will loop through the listings and hide them all.
@@ -183,22 +182,25 @@ var ViewModel = function(){
         map.fitBounds(bounds);
     };
 
+    self.animateMarker = function(marker){
+        // start animation
+        marker.setAnimation(google.maps.Animation.BOUNCE);
+
+        // stop animation after 3 bounces
+        window.setTimeout(function(){
+            marker.setAnimation(null);
+        }, 1400);
+    };
+
+    // handler for when a marker is clicked
     self.markerClick = function(){
 
-        var this_marker = this;
-
-        if(placeInfoWindow.marker == this_marker){
-
+        if(placeInfoWindow.marker == this){
             console.log("This infowindow already is on this marker.");
         } else {
-            self.getPlacesDetails(this_marker, placeInfoWindow);
+            self.getPlacesDetails(this, placeInfoWindow);
 
-
-            this_marker.setAnimation(google.maps.Animation.BOUNCE);
-
-            window.setTimeout(function(){
-                this_marker.setAnimation(null);
-            }, 2500);
+            self.animateMarker(this);
         }
     };
 
@@ -254,7 +256,7 @@ var ViewModel = function(){
         });
 
 
-
+        // construct json object to be sent to server 
         var parameters = {
             term: marker.title,
             location: {
