@@ -45,19 +45,76 @@ aside {
     width: 200px;
 }
 
-#zoom-to-area-text {
-    width: 300px;
-    display: inline-block;
-}
-
-#places-search {
-    width: 300px;
-    display: inline-block;
-}
-
 
 @media screen and (max-width: 599px){
+
     header {
+        top: 0;
+        left: 0;
+        right: 0;
+        height: 160px;
+        position: absolute;
+    }
+
+    header-title {
+        color: white;
+        font-size: 20px;
+        display: block;
+        padding-top: 15px;
+        padding-bottom: 15px;
+        margin: 0 auto;
+    }
+
+    .nav-location {
+        left: 20px;
+        right: 10px;
+        position: absolute;
+    }
+
+    .nav-query {
+        left: 20px;
+        right: 10px;
+        top: 100px;
+        position: absolute;
+    }
+
+    #places-search {
+        width: 200px;
+        display: inline-block;
+    }
+
+    #zoom-to-area-text {
+        width: 200px;
+        display: inline-block;
+    }
+
+    #zoom-to-area {
+        display: inline-block;
+    }
+
+    #go-places {
+        display: inline-block;
+    }
+
+    #map {
+        background-color: #3993D7;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        top: 160px;
+        height: 500;
+        position: absolute;
+        display: block;
+    }
+
+    aside {
+        left: 0;
+        right: 0;
+        top: 570px;
+        position: absolute;
+    }
+
+    /*header {
         top: 0;
         left: 0;
         right: 0;
@@ -77,11 +134,8 @@ aside {
     }
     
     aside {
-        left: 0;
-        right: 0;
-        top: 520px;
-        bottom: 500px;
-        position: absolute;
+        display: block;
+        width: 100%;
         background-color: #777;
     }
 
@@ -113,6 +167,7 @@ aside {
         bottom: 0;
         top: 160px;
         position: absolute;
+        display: block;
     }
 
     .one-result-container:hover {
@@ -124,7 +179,7 @@ aside {
         padding: 5px;
         margin: 0 auto;
         text-align: center;
-    }
+    }*/
 }
 
 @media screen and (min-width: 600px){
@@ -196,6 +251,16 @@ aside {
     search-results {
         top: 30px;
         position: absolute;
+    }
+
+    #zoom-to-area-text {
+        width: 300px;
+        display: inline-block;
+    }
+
+    #places-search {
+        width: 300px;
+        display: inline-block;
     }
 
 }
@@ -274,6 +339,16 @@ aside {
     search-results {
         top: 30px;
         position: absolute;
+    }
+
+    #zoom-to-area-text {
+        width: 300px;
+        display: inline-block;
+    }
+
+    #places-search {
+        width: 300px;
+        display: inline-block;
     }
 
 }
