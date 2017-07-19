@@ -14,7 +14,7 @@ body {
     font-family: arial, sans-serif;
     height: 100%;
     margin: 0;
-    padding: 10px 10px 20px 20px;
+/*    padding: 10px 10px 20px 20px;*/
     background-color: #82ACC3;
 }
 
@@ -42,18 +42,15 @@ aside {
 
 .one-result-container:hover {
     background-color: #cccccc;
-    width: 200px;
+    width: 100%;
 }
 
 
 @media screen and (max-width: 599px){
 
     header {
-        top: 0;
-        left: 0;
-        right: 0;
-        height: 160px;
-        position: absolute;
+        height: 155px;
+        width: 100%;
     }
 
     header-title {
@@ -62,20 +59,19 @@ aside {
         display: block;
         padding-top: 15px;
         padding-bottom: 15px;
-        margin: 0 auto;
+        margin: 0 auto; 
+        text-align: center;
     }
 
     .nav-location {
-        left: 20px;
-        right: 10px;
-        position: absolute;
+        max-width: 300px;
+        margin: 0 auto;
     }
 
     .nav-query {
-        left: 20px;
-        right: 10px;
-        top: 100px;
-        position: absolute;
+        max-width: 300px;
+        margin: 0 auto;
+        padding-top: 10px;
     }
 
     #places-search {
@@ -97,89 +93,9 @@ aside {
     }
 
     #map {
-        background-color: #3993D7;
-        left: 0;
-        right: 0;
-        bottom: 0;
-        top: 160px;
-        height: 500;
-        position: absolute;
-        display: block;
-    }
-
-    aside {
-        left: 0;
-        right: 0;
-        top: 570px;
-        position: absolute;
-    }
-
-    /*header {
-        top: 0;
-        left: 0;
-        right: 0;
-        position: absolute;
-        height: 160px;
-
-    }
-
-    header-title {
-        color: white;
-        font-size: 20px;
-        display: block;
-        padding-left: 2px;
-        padding-top: 15px;
-        padding-bottom: 15px;
-        text-align: center;
-    }
-    
-    aside {
-        display: block;
         width: 100%;
-        background-color: #777;
+        height: 300px;
     }
-
-
-    nav {
-        display: flex;
-        flex-wrap: wrap;
-    }
-
-    .nav-location {
-        display: inline-block;
-        margin: 0 auto;
-        padding: 5px;
-        position: relative; 
-
-    }
-
-    .nav-query {
-        display: inline-block;
-        margin: 0 auto;
-        padding: 5px;
-        position: relative;
-    }
-
-    #map {
-        background-color: #3993D7;
-        left: 0;
-        right: 0;
-        bottom: 0;
-        top: 160px;
-        position: absolute;
-        display: block;
-    }
-
-    .one-result-container:hover {
-        width: 100%;
-    }
-
-    .one-result {
-        width: 200px;
-        padding: 5px;
-        margin: 0 auto;
-        text-align: center;
-    }*/
 }
 
 @media screen and (min-width: 600px){
