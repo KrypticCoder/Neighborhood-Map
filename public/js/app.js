@@ -106,7 +106,7 @@ var ViewModel = function(){
     // This function will loop through the listings and hide them all.
      self.hideMarkers = function(markers) {
         for (var i = 0; i < markers.length; i++) {
-            markers[i].setMap(null);
+            markers[i].setVisible(false);
         }
     };
 
@@ -114,6 +114,9 @@ var ViewModel = function(){
     // locates it, and then zooms into that area. This is so that the user can
     // show all listings, then decide to focus on one area of the map.
     self.zoomToArea = function() {
+        self.hideMarkers(self.placeMarkers);
+        self.placeMarkers([]);
+
         // Initialize the geocoder.
         var geocoder = new google.maps.Geocoder();
         // Get the address or place that the user entered.
@@ -142,7 +145,7 @@ var ViewModel = function(){
     // It will do a nearby search using the selected query string or place.
     self.searchBoxPlaces = function(searchBox) {
         self.hideMarkers(self.placeMarkers);
-        self.placeMarkers.removeAll();
+        self.placeMarkers([]);
         var places = searchBox.getPlaces();
         // For each place, get the icon, name and location.
         self.createMarkersForPlaces(places);
@@ -156,7 +159,7 @@ var ViewModel = function(){
     self.textSearchPlaces = function() {
         var bounds = map.getBounds();
         self.hideMarkers(self.placeMarkers);
-        self.placeMarkers.removeAll();
+        self.placeMarkers([]);
         var placesService = new google.maps.places.PlacesService(map);
         placesService.textSearch({
             query: self.placesSearch(),
