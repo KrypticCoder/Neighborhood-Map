@@ -10,6 +10,19 @@ function mapLoadingError(){
     window.alert("Map could not be loaded. Please make sure your API key is correct.");
 }
 
+// This function takes in a COLOR, and then creates a new marker
+// icon of that color. The icon will be 21 px wide by 34 high, have an origin
+// of 0, 0 and be anchored at 10, 34).
+function makeMarkerIcon(markerColor) {
+    var markerImage = new google.maps.MarkerImage('http://chart.googleapis.com/chart?chst=d_map_spin&chld=1.15|0|'+ markerColor + 
+        '|40|_|%E2%80%A2',
+        new google.maps.Size(21, 34),
+        new google.maps.Point(0, 0),
+        new google.maps.Point(10, 34),
+        new google.maps.Size(21,34));
+    return markerImage;
+}
+
 var ViewModel = function(){
 
     var self = this;
@@ -23,24 +36,37 @@ var ViewModel = function(){
 
     self.filteredMarkers = ko.computed(function() {
 
+        for(var i = 0; i < self.placeMarkers().length; i++){
+            self.placeMarkers()[i].setVisible(false);
+        }
+
         var filter = self.filter().toLowerCase();
-        if (!filter) {
-            return self.placeMarkers();
+        var newMarkers = [];
+
+        if (!filter) {            
+            newMarkers =  self.placeMarkers();
         } else {
-            return ko.utils.arrayFilter(self.placeMarkers(), function(marker) {
+            newMarkers = ko.utils.arrayFilter(self.placeMarkers(), function(marker) {
 
                 if (self.stringContains(marker.title.toLowerCase(), filter)){
-                    for(var i = 0; i < self.placeMarkers.length; i++){
-                        self.placeMarkers[i].setVisible = true;
-                    }
+
                     return true;
                 } else {
-                    marker.setVisible(false);
                     return false;
                 }
                 
             });
+
         }
+
+        for( i = 0; i < newMarkers.length; i++){
+            newMarkers[i].setVisible(true);
+        }
+
+        console.log('placeMarkers = ', self.placeMarkers().length);
+        console.log('newMarkers = ', newMarkers.length);   
+        return newMarkers;
+
     }, this);
 
     // function caleld when user clicks 'Zoom'
@@ -115,7 +141,7 @@ var ViewModel = function(){
     // This function fires when the user selects a searchbox picklist item.
     // It will do a nearby search using the selected query string or place.
     self.searchBoxPlaces = function(searchBox) {
-        hideMarkers(self.placeMarkers);
+        self.hideMarkers(self.placeMarkers);
         self.placeMarkers.removeAll();
         var places = searchBox.getPlaces();
         // For each place, get the icon, name and location.
@@ -144,17 +170,18 @@ var ViewModel = function(){
 
     // this function creates markers for each place found in either places search.
     self.createMarkersForPlaces = function(places){
-        var maxLength = Math.min(50, places.length);
-
+        var markerColor = '900C3F';
+        var markerURL = 'http://chart.googleapis.com/chart?chst=d_map_spin&chld=1.15|0|'+ markerColor + 
+        '|40|_|%E2%80%A2';
         var bounds = new google.maps.LatLngBounds();
-        for(var i = 0; i < maxLength; i++){
+        for(var i = 0; i < places.length; i++){
             var place = places[i];
             var icon = {
-                url: place.icon,
+                url: markerURL,
                 size: new google.maps.Size(35, 35),
                 origin: new google.maps.Point(0, 0),
                 anchor: new google.maps.Point(15, 34),
-                scaledSize: new google.maps.Size(25, 25)
+                scaledSize: new google.maps.Size(25, 30),
             };
 
             var marker = new google.maps.Marker({
@@ -163,7 +190,7 @@ var ViewModel = function(){
                 title: place.name,
                 position: place.geometry.location,
                 animation: google.maps.Animation.DROP,
-                id: place.place_id
+                id: place.place_id,
             });
 
             // Create a single infowwindow to be used with the place details information
@@ -219,7 +246,7 @@ var ViewModel = function(){
             if(status === google.maps.places.PlacesServiceStatus.OK){
                 // Set the marker property on this infowindow so it isn't created again
                 infowindow.marker = marker;
-                innerHTML = '<div id="infowindow">';
+                innerHTML = '<div class="infowindow">';
                 if(place.name){
                     innerHTML += '<strong>' + place.name + '</strong>';
                 }
@@ -272,14 +299,14 @@ var ViewModel = function(){
             success: function(res){
                 if(res.businesses.length){
 
-                    var place_id = res.businesses[0].id;
-                    var web_url = res.businesses[0].url;
+                    var placeID = res.businesses[0].id;
+                    var webURL = res.businesses[0].url;
 
 
                     // get reviews for that business
                     $.ajax({
                         url: '/yelp_reviews',
-                        data: {place_id: place_id},
+                        data: {place_id: placeID},
 
                         success: function(res){
 
@@ -298,16 +325,18 @@ var ViewModel = function(){
                                     var text = res.reviews[i].text;
                                     var rating = res.reviews[i].rating;
 
-                                    innerHTML += '<div id="review">' + 
-                                        '<div id="review_name">' + name + '</div>' +
-                                        '<div id="review_rating">' + rating + '</div>' +
-                                        '<div id="review_text">' + text + '</div>' +
+                                    var image = '../images/small/small_' + String(rating) + '.png';
+
+                                    innerHTML += '<div class="review">' + 
+                                        '<div class="review-name">' + name + '</div>' +
+                                        '<div class="review-rating"><img src="' + image + '"></div>' + 
+                                        '<div class="review-text">' + text + '</div>' +
                                     '</div><br>';
 
                                 }
                             }
 
-                            innerHTML += '<a href="' + web_url + '">More Info</a>';
+                            innerHTML += '<a href="' + webURL + '"><img src="../images/yelp_logo.png" class="yelpLogo"></a>';
 
                             if(atLeastOne){
                                 infowindow.setContent(innerHTML);
@@ -332,8 +361,7 @@ var ViewModel = function(){
         });
 
     };
-
-};
+}
 
 var viewModel = new ViewModel();
 ko.applyBindings(viewModel);
@@ -343,73 +371,17 @@ function initMap() {
 
     placeInfoWindow = new google.maps.InfoWindow();
 
-    // Create a styles array to use with the map.
-    var styles = [
-        {
-            featureType: 'water',
-            stylers: [
-                { color: '#19a0d8' }
-            ]
-        },{
-            featureType: 'administrative',
-            elementType: 'labels.text.stroke',
-            stylers: [
-                { color: '#ffffff' },
-                { weight: 6 }
-            ]
-        },{
-            featureType: 'administrative',
-            elementType: 'labels.text.fill',
-            stylers: [
-                { color: '#e85113' }
-            ]
-        },{
-            featureType: 'road.highway',
-            elementType: 'geometry.stroke',
-            stylers: [
-                { color: '#efe9e4' },
-                { lightness: -40 }
-            ]
-        },{
-            featureType: 'transit.station',
-            stylers: [
-                { weight: 9 },
-                { hue: '#e85113' }
-            ]
-        },{
-            featureType: 'road.highway',
-            elementType: 'labels.icon',
-            stylers: [
-                { visibility: 'off' }
-            ]
-        },{
-            featureType: 'water',
-            elementType: 'labels.text.stroke',
-            stylers: [
-                { lightness: 100 }
-            ]
-        },{
-            featureType: 'water',
-            elementType: 'labels.text.fill',
-            stylers: [
-                { lightness: -100 }
-            ]
-        },{
-            featureType: 'poi',
-            elementType: 'geometry',
-            stylers: [
-                { visibility: 'on' },
-                { color: '#f0e4d3' }
-            ]
-        },{
-            featureType: 'road.highway',
-            elementType: 'geometry.fill',
-            stylers: [
-                { color: '#efe9e4' },
-                { lightness: -25 }
-            ]
+    var styles = [];
+
+    // populate styles array with styles from 'styles.json'
+    $.ajax({
+        dataType: "json",
+        url: '../styles.json',
+        async: false,
+        success: function(data){
+            styles = data.styles;
         }
-    ];
+    });
 
     // Constructor creates a new map - only center and zoom are required.
     map = new google.maps.Map(document.getElementById('map'), {

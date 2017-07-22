@@ -93,6 +93,7 @@ aside {
     #map {
         width: 100%;
         height: 300px;
+        background-color: #3993D7;
     }
 }
 
@@ -143,7 +144,6 @@ aside {
 
 
     #map {
-        background-color: #3993D7;
         height: 100%;
         bottom: 0;
         right: 0;
@@ -231,7 +231,6 @@ aside {
     }
 
     #map {
-        background-color: #3993D7;
         height: 100%;
         bottom: 0;
         right: 0;
@@ -271,23 +270,25 @@ aside {
     font-size: 12px;
 }
 
-#business_info > img {
-    width: 200px;
-    height: 200px;
-}
-
-#infowindow {
+.infowindow {
     max-width: 400px;
 }
 
-#review_header-title {
-    float: left;
+.review-name{
+    width: 100px;
+    display: inline-block;
 }
 
-#review_rating {
+.review-rating {
     float: right;
+    display: inline-block;
 }
 
-#review_text {
+.review-text {
     clear: both;
+}
+
+.yelpLogo {
+    width: 75px;
+    height: 40px;
 }
